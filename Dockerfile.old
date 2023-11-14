@@ -1,0 +1,12 @@
+FROM python:3
+
+WORKDIR /app
+
+COPY ./* .
+
+RUN python3 -m pip install --upgrade pip
+
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+#CMD ["python", "transactions.py", "-u",  "-o ./transactions.csv", "--number_transactions 500" ]
+CMD ["python", "transactions.py", "-u",  "-o /tmp/transactions.csv" ]
