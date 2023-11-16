@@ -2,10 +2,12 @@
 # What is in this repo?
 This is a python file that generates random transactions. It was generated with ChatGPT with some inputs from confluence. the code isn't the most efficient, but was a quick trial of ChatGPT generating python code.
 
-1. Code can be run/debugged standalone in your favorite Python IDE (mine is PyCharm)
-2. You can also build a container and run it via the container.
+1. Code can be run/debugged standalone in your favorite Python IDE (mine is [PyCharm](https://www.jetbrains.com/pycharm/)), others seem to like [Visual Code](https://code.visualstudio.com/) either are better than IDLE. If you have an academic email address, you may be able to download the enterprise version of the IDE, the Community Editions work just fine.
 
-# To build container, install [Podman-Desktop](https://podman-desktop.io/docs/installation)
+2. You can also build a container and run it via the container.
+3. Containers are very cool and encapsulate all your dependencies in the image. Theoretically, if you build an image it should run everywhere.
+
+# To build a container image, install [Podman-Desktop](https://podman-desktop.io/docs/installation)
 Once podman is installed, you can start running/building container images. 
 
 Launch Podman on your desktop. Podman should enable all the services you need. I can't recall what needs to be setup, but if I can do it, so can you! 
