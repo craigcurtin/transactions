@@ -1,0 +1,2 @@
+
+podman image list --all

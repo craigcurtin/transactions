@@ -23,3 +23,4 @@ else
     podman run -v /Users/craigcurtin/tmp:/tmp -it transaction transactions.py --debug 20 -u -o /tmp/transactions.csv  --number_transactions  50
 fi
 
+ls -al $HOME/tmp/*.csv
