@@ -6,7 +6,11 @@ This is a python file that generates random transactions. It was generated with 
 2. You can also build a container and run it via the container.
 
 # To build container, install [Podman-Desktop](https://podman-desktop.io/docs/installation)
-Once podman is installed, you can start building container images. Launch Podman on your desktop. Podman should enable all the services you need. I can't recall what needs to be setup, but if I can do it, so can you! Once you have the Podman UX up and running, click the "build" button and navigate to the Dockerfile, select the Dockerfile and you should see the steps that Podman takes to build the image.
+Once podman is installed, you can start running/building container images. 
+
+Launch Podman on your desktop. Podman should enable all the services you need. I can't recall what needs to be setup, but if I can do it, so can you! 
+
+Once you have the Podman UX up and running, click the "build" button and navigate to the Dockerfile, select the Dockerfile, name it 'transaction' (this will create a tagged image) and you should see the steps that Podman takes to build the 'transaction' image. Initially, I had some issues from cmd line, then brought up UX, built and then running from CLI worked every single time.
 
 1. Open/Debug transactions.py once you are happy with functionality, build the container.
 2. Build the container and tag the image _transaction_:
