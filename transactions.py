@@ -1,5 +1,3 @@
-
-
 import csv
 import random
 import sys
@@ -11,9 +9,9 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 import warnings
 import errno
 import logging
-import string
-warnings.simplefilter("ignore")
 
+
+warnings.simplefilter("ignore")
 
 # Define the CSV headers
 csv_headers = [
@@ -45,27 +43,26 @@ source_merchants = [
     Merchant("Terra Blues", "76543", 10022, 0)
 ]
 
-def csv_writer(out_file_name, date_of_service, number_transactions):
 
+def csv_writer(out_file_name, date_of_service, number_transactions):
     # test to see if we can write the output by ... yeah, writing the output
     try:
         with open(out_file_name, 'w') as f:
             # file opened for writing. write to it here
-            print(f"success opening [{out_file_name}]")
+            log.debug(f"success opening [{out_file_name}]")
             pass
-    except IOError as x:
-        sys.stderr.write( f'if we are in Container ... error {x.errno} {x.strerror}')
-        if x.errno == errno.EACCES:
-            sys.stderr.write(f'{out_file_name} no perms')
-        elif x.errno == errno.EISDIR:
-            sys.stderr.write(f'{out_file_name} is directory')
-    except FileNotFoundError as x:
-        sys.stderr.write( f'if we are in Container is volume mounted? ... error {x.errno} {x.strerror}')
-        if x.errno == errno.EACCES:
-            sys.stderr.write(f'{out_file_name} no perms')
-        elif x.errno == errno.EISDIR:
-            sys.stderr.write(f'{out_file_name} is directory')
-
+    except FileNotFoundError as exc:
+        log.exception(f'if we are in Container is volume mounted? ... error {exc.errno} {exc.strerror}')
+        if exc.errno == errno.EACCES:
+            log.exception(f'{out_file_name} no perms')
+        elif exc.errno == errno.EISDIR:
+            log.exception(f'{out_file_name} is directory')
+    except IOError as exc:
+        log.exception(f'if we are in Container ... error {exc.errno} {exc.strerror}')
+        if exc.errno == errno.EACCES:
+            log.exception(f'{out_file_name} no perms')
+        elif exc.errno == errno.EISDIR:
+            log.exception(f'{out_file_name} is directory')
 
     # Open a CSV file for writing
     with open(out_file_name, mode="w", newline="") as csv_file:
@@ -78,40 +75,40 @@ def csv_writer(out_file_name, date_of_service, number_transactions):
         for _ in range(number_transactions):
             # Generate random data
             merchant_info = random.choice(source_merchants)
-            accountNumber = "L" + str(random.randint(1000, 1050))
-            accountName = ""
-            accountZipcode = "accountZipcode = 10020"
+            account_number = "L" + str(random.randint(1000, 1050))
+            account_name = ""
+            account_zipcode = "accountZipcode = 10020"
 
-            if accountNumber == "L1000":
-                accountName = "Fred Blogs"
-            elif accountNumber == "L1001":
-                accountName = "Donald Trump"
-            elif accountNumber == "L1002":
-                accountName = "Greg Abbot"
-            elif accountNumber == "L1003":
-                accountName = "Joe Biden"
-            elif accountNumber == "L1010":
-                accountName = "Barack Obama"
-            elif accountNumber == "L1020":
-                accountName = "Jerry Springer"
-            elif accountNumber == "L1030":
-                accountName = "RL Burnside"
-            elif accountNumber == "L1031":
-                accountName = "David Muir"
-            elif accountNumber == "L1032":
-                accountName = "Lester Holt"
-            elif accountNumber == "L1033":
-                accountName = "Nora ODonnell"
-            elif accountNumber == "L1034":
-                accountName = "Eric Adams"
-            elif accountNumber == "L1035":
-                accountName = "Eric Adams"
-            elif accountNumber == "L1036":
-                accountName = "Eric Adams"
-            elif accountNumber == "L1049":
-                accountName = "Stevie Ray Vaughn"
+            if account_number == "L1000":
+                account_name = "Fred Blogs"
+            elif account_number == "L1001":
+                account_name = "Donald Trump"
+            elif account_number == "L1002":
+                account_name = "Greg Abbot"
+            elif account_number == "L1003":
+                account_name = "Joe Biden"
+            elif account_number == "L1010":
+                account_name = "Barack Obama"
+            elif account_number == "L1020":
+                account_name = "Jerry Springer"
+            elif account_number == "L1030":
+                account_name = "RL Burnside"
+            elif account_number == "L1031":
+                account_name = "David Muir"
+            elif account_number == "L1032":
+                account_name = "Lester Holt"
+            elif account_number == "L1033":
+                account_name = "Nora ODonnell"
+            elif account_number == "L1034":
+                account_name = "Eric Adams"
+            elif account_number == "L1035":
+                account_name = "Eric Adams"
+            elif account_number == "L1036":
+                account_name = "Eric Adams"
+            elif account_number == "L1049":
+                account_name = "Stevie Ray Vaughn"
             else:
-                accountName = "Unknown Hooligan"
+                account_name = "Unknown Hooligan"
 
             time_of_service = today - timedelta(hours=random.randint(0, 23))
             # remove the date, just take time component
@@ -127,17 +124,20 @@ def csv_writer(out_file_name, date_of_service, number_transactions):
                 merchant_info.name,
                 merchant_info.merchantId,
                 merchant_info.merchantZip,
-                accountNumber,
-                accountName,
-                accountZipcode,
+                account_number,
+                account_name,
+                account_zipcode,
                 amount,
                 tip,
                 final_amount
             ]
             writer.writerow(transaction)
 
+
+# some cmd line args for copy/paste testing
 # -o "/tmp/transactions.csv" --number_transactions 23 --date_of_service "1970-01-01"
-# --debug -u -o "/tmp/transactions.csv" --number_transactions 12345 --date_of_service "1970-01-01"
+# --debug 10 -u -o "/tmp/transactions.csv" --number_transactions 12345 --date_of_service "1970-01-01"
+
 if __name__ == '__main__':
     log = logging.getLogger("transactions")
     logging.basicConfig(level=logging.INFO)
@@ -150,29 +150,33 @@ if __name__ == '__main__':
 
     # Parse command line arguments
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-D", "--debug", default=logging.INFO, type=int, help=f"debug level Debug:{logging.DEBUG} to Info:{logging.INFO}")
-    parser.add_argument("-d", "--date_of_service", default=formatted_date, type=str, help="Date of service format: YYYY-MM-DD")
+    parser.add_argument("-D", "--debug", default=logging.INFO, type=int,
+                        help=f"debug level Debug:{logging.DEBUG} to Info:{logging.INFO}")
+    parser.add_argument("-d", "--date_of_service", default=formatted_date, type=str,
+                        help="Date of service format: YYYY-MM-DD")
 
     parser.add_argument("-n", "--number_transactions", default=20, type=int, help="Number of Transactions to create")
     parser.add_argument("-o", "--out_file_name", default="transactions.csv", type=str, help="File name for output file")
-    parser.add_argument("-u", "--unique",action="store_true", default=False,  help="Mangle File name with linux timestamp in output file name")
+    parser.add_argument("-u", "--unique", action="store_true", default=False,
+                        help="Mangle File name with linux timestamp in output file name")
 
     args = vars(parser.parse_args())
 
-    log.debug('startup')
-    logging.getLogger().setLevel(args["debug"])
+    source_file = sys.argv[0].split('/')[-1]
+    log.info(f'{source_file} is startup')
+
+    logging.getLogger().setLevel(args["debug"])         # set to level passed in
     date_of_service = args["date_of_service"]
     number_transactions = args["number_transactions"]
     out_file_name = args["out_file_name"]
     make_file_name_unique = args["unique"]
 
-    out_file_name = out_file_name.strip()   # saw strange leading space from Container inserted lstrip()
+    log.debug(f'{args}')
+    out_file_name = out_file_name.strip()               # saw strange leading space from Container inserted lstrip()
     if make_file_name_unique:
         linux_ts = time.time()
         out_file_name = out_file_name[:-4] + f"_{linux_ts}" + out_file_name[-4:]
     log.debug(f'startup: outfile: [{out_file_name}], dateOfService: [{date_of_service}], numTransactions: [{number_transactions}]')
     csv_writer(out_file_name, date_of_service, number_transactions)
 
-print(f"{number_transactions} Transactions generated and written to [{out_file_name}]")
-
-
+    log.info(f"{number_transactions} Transactions generated and written to [{out_file_name}]")
